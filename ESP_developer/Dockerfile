@@ -12,11 +12,8 @@ WORKDIR /home/$USER
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 user=$USER && \
     mkdir -p /home/$USER && \
-    mkdir -p /etc/sudoers.d && \
     echo "${user}:x:${uid}:${gid}:${user},,,:/home/${user}:/bin/bash" >> /etc/passwd && \
     echo "${user}:x:${uid}:" >> /etc/group && \
-    echo "${user} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${user} && \
-    chmod 0440 /etc/sudoers.d/${user} && \
     chown ${uid}:${gid} -R /home/${user} && \
     apt-get update \
 	&& apt-get install -y \
@@ -25,10 +22,8 @@ RUN export uid=1000 gid=1000 user=$USER && \
 		openjdk-9-jre \
 		xvfb \
         xz-utils \
-	sudo \
-    && add-apt-repository ppa:ubuntuhandbook1/apps \
-    && apt-get update \
-    && apt-get install -y avrdude avrdude-doc \
+        avrdude \
+        avrdude-doc \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
