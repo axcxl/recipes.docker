@@ -1,8 +1,10 @@
 #!/bin/bash
 
 IMG_NAME=ghidra
-VERS=9.2_PUBLIC_20201113
-SHA256=ffebd3d87bc7c6d9ae1766dd3293d1fdab3232a99b170f8ea8b57497a1704ff6
+VERS=ghidra_10.0.1_PUBLIC_20210708
+tmp=${VERS#*_}
+FOLD=${tmp%%_*}
+SHA256=9b68398fcc4c2254a3f8ff231c4e8b2ac75cc8105f819548c7eed3997f8c5a5d
 
 USER=dev
 
@@ -14,8 +16,8 @@ fi
 WORKSPACE=$1
 
 if [[ "$(docker images -q $IMG_NAME:$VERS 2> /dev/null)" == "" ]]; then
-    echo "BUILDING using IDE version $VERS"
-    docker build -t $IMG_NAME:$VERS --build-arg VERS=$VERS --build-arg USER=$USER --build-arg SHA256=$SHA256 .
+    echo "BUILDING using IDE version $VERS from folder $FOLD"
+    docker build -t $IMG_NAME:$VERS --build-arg VERS=$VERS --build-arg USER=$USER --build-arg SHA256=$SHA256 --build-arg FOLD=$FOLD .
 fi
 
 echo "STARTING, workspace at $1"

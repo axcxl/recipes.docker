@@ -9,6 +9,7 @@ FROM openjdk:11-slim
 ARG VERS
 ARG USER
 ARG SHA256
+ARG FOLD
 
 ENV HOME /home/$USER
 WORKDIR /home/$USER
@@ -34,8 +35,10 @@ RUN export uid=1000 gid=1000 user=$USER && \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV GHIDRA_VERS ghidra_$VERS
-RUN (wget -q -O ghidra.zip https://ghidra-sre.org/${GHIDRA_VERS}.zip \
+ENV GHIDRA_FOLD $FOLD
+ENV GHIDRA_VERS $VERS
+
+RUN (wget -O ghidra.zip https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${GHIDRA_FOLD}_build/${GHIDRA_VERS}.zip \
 	&& echo "$SHA256 ghidra.zip" | sha256sum -c - \
     && unzip ghidra.zip -d /opt \
     && rm ghidra.zip \
